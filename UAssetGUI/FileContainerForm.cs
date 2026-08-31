@@ -1364,10 +1364,41 @@ namespace UAssetGUI
             }
             else
             {
-                new Process
+                bool openSuccess = true;
+                
+                try
                 {
-                    StartInfo = new ProcessStartInfo(outputPath) { UseShellExecute = true }
-                }.Start(); // open externally
+                    new Process
+                    {
+                        StartInfo = new ProcessStartInfo(outputPath) { UseShellExecute = true }
+                    }.Start(); // open externally
+                }
+                catch (Win32Exception)
+                {
+                    if (ext == ".json" || ext == ".txt" || ext == ".md" || ext == "")
+                    {
+                        try
+                        {
+                            new Process
+                            {
+                                StartInfo = new ProcessStartInfo("notepad.exe") { Arguments = outputPath, UseShellExecute = true }
+                            }.Start(); // open externally in notepad
+                        }
+                        catch (Win32Exception)
+                        {
+                            openSuccess = false;
+                        }
+                    }
+                    else
+                    {
+                        openSuccess = false;
+                    }
+                }
+
+                if (!openSuccess)
+                {
+                    MessageBox.Show(string.Format(UAGConfig.GetString("Error.Generic"), string.Empty), this.ParentForm.BaseForm.DisplayVersion);
+                }
             }
         }
 
