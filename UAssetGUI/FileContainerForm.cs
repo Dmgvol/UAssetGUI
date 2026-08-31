@@ -1381,7 +1381,7 @@ namespace UAssetGUI
                         {
                             new Process
                             {
-                                StartInfo = new ProcessStartInfo("notepad.exe") { Arguments = outputPath, UseShellExecute = true }
+                                StartInfo = new ProcessStartInfo("notepad.exe") { Arguments = $"\"{outputPath}\"", UseShellExecute = true }
                             }.Start(); // open externally in notepad
                         }
                         catch (Win32Exception)
